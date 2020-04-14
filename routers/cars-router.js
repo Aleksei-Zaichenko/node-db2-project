@@ -47,6 +47,29 @@ router.post('/', (req, res) => {
     })
 })
 
+router.put('/:id', (req, res) => {
+    db('cars')
+    .where({id: req.params.id})
+    .update(req.body)
+    .then(updated=>{
+        if(updated){
+            db('cars')
+            .where({id: req.params.id})
+            .then(car => {
+                res.status(200).json({message: `A car with ID:${req.params.id} was updated successfully`,
+                                    data: car
+            });
+            })
+        } else {
+            res.status(500).json({message: 'error 500'});
+        }
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(404).json({message: 'error 404'});
+    })
+})
+
 router.delete('/:id', (req, res) => {
     db('cars')
     .where({id: req.params.id})
