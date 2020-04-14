@@ -47,4 +47,21 @@ router.post('/', (req, res) => {
     })
 })
 
+router.delete('/:id', (req, res) => {
+    db('cars')
+    .where({id: req.params.id})
+    .del()
+    .then(deleted=>{
+        if(deleted){
+            res.status(200).json({message: `A car with ID:${req.params.id} was removed from database successfully`});
+        } else {
+            res.status(500).json({message: 'error 500'});
+        }
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(404).json({message: 'error 404'});
+    })
+})
+
 module.exports = router;
